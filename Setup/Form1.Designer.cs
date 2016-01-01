@@ -36,22 +36,22 @@
             this.button3 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(258, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Please find GTAIV.exe file. Setup will install files near.";
-            // 
+            this.label1.Text = "Please locate your GTAIV.exe file. Files will be installed here.";
+            //
             // openFileDialog1
-            // 
+            //
             this.openFileDialog1.Filter = "GTA IV Executable|GTAIV.exe";
-            // 
+            //
             // button1
-            // 
+            //
             this.button1.Location = new System.Drawing.Point(15, 25);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
@@ -59,37 +59,37 @@
             this.button1.Text = "Browse";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
+            //
             // textBox1
-            // 
+            //
             this.textBox1.Location = new System.Drawing.Point(96, 28);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(358, 20);
             this.textBox1.TabIndex = 2;
-            // 
+            //
             // button2
-            // 
+            //
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.button2.Location = new System.Drawing.Point(336, 407);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(118, 23);
             this.button2.TabIndex = 3;
-            this.button2.Text = "Start installation";
+            this.button2.Text = "Install";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
+            //
             // button3
-            // 
+            //
             this.button3.Location = new System.Drawing.Point(12, 407);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(118, 23);
             this.button3.TabIndex = 4;
-            this.button3.Text = "Cancel and exit";
+            this.button3.Text = "Cancel";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
+            //
             // textBox2
-            // 
+            //
             this.textBox2.BackColor = System.Drawing.SystemColors.Control;
             this.textBox2.Location = new System.Drawing.Point(15, 54);
             this.textBox2.Multiline = true;
@@ -98,10 +98,10 @@
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox2.Size = new System.Drawing.Size(439, 347);
             this.textBox2.TabIndex = 5;
-            this.textBox2.Text = "Installation progress and log will be shown here.\r\n\r\n";
-            // 
+            this.textBox2.Text = "Installation progress\r\n\r\n";
+            //
             // Form1
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(470, 439);
@@ -115,7 +115,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";
-            this.Text = "GTA IV Multiplayer - Setup";
+            this.Text = "GTA IV Multiplayer - Install";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,4 +132,3 @@
         private System.Windows.Forms.TextBox textBox2;
     }
 }
-

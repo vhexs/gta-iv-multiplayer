@@ -60,7 +60,7 @@ namespace MIVServer
             {
                 if (!vehicles.ContainsKey(i)) return i;
             }
-            throw new Exception("No free ids");
+            throw new Exception("No free vehicle IDs.");
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.IO.Compression;
 using System.Web;
 using System.Net;
 using System.Net.Sockets;
@@ -44,27 +45,30 @@ namespace Setup
                 button2.Enabled = false;
                 button3.Enabled = false;
                 writeLogLine("Checking path...");
-                if (textBox1.Text.Length == 0) throw new ArgumentException("Selected install path is empty");
+                if (textBox1.Text.Length == 0) throw new ArgumentException("Selected installation path is empty.");
                 string path = Directory.Exists(textBox1.Text) ? textBox1.Text : Path.GetDirectoryName(textBox1.Text);
                 writeLogLine("Checking " + path);
-                if (!Directory.Exists(path)) throw new ArgumentException("Selected install path does not exist");
-                if (!File.Exists(path + "\\LaunchGTAIV.exe") || !File.Exists(path + "\\GTAIV.exe")) throw new InvalidDataException("Selected path does not seem to contain valid GTA IV installation");
-                writeLogLine("Path seems valid!");
-                writeLogLine("Starting download...");
+                if (!Directory.Exists(path)) throw new ArgumentException("Selected installation path does not exist.");
+                if (!File.Exists(path + "\\LaunchGTAIV.exe") || !File.Exists(path + "\\GTAIV.exe")) throw new InvalidDataException("Selected path does not seem to contain a valid GTA IV installation.");
+                writeLogLine("Path seems valid - downloading required files!");
                 WebClient client = new WebClient();
-                string tmp7zfile = Path.GetTempFileName() + ".exe";
-                string tmparchfile = Path.GetTempFileName() + ".7z";
-                writeLogLine("Downloading 7z unpacker...");
+                string tmpUnpacker = Path.GetTempFileName() + ".exe"; // generates a random name for temp file with .exe on the end
+                string tmpFiles = Path.GetTempFileName() + ".zip"; // generates a random name for temp file with .zip on the end
+                //writeLogLine("Downloading 7z unpacker.");
+                //Application.DoEvents();
+                //client.DownloadFile("http://gta.vdgtech.eu/install_7z.exe", tmpUnpacker); // might not need.
+                writeLogLine("Downloading sources and binaries from GitHub.");
                 Application.DoEvents();
-                client.DownloadFile("http://gta.vdgtech.eu/install_7z.exe", tmp7zfile);
-                writeLogLine("Downloading release archive...");
+                client.DownloadFile("https://github.com/vhexs/gta-iv-multiplayer/archive/master.zip", tmpFiles); // download entire source inc binaries
+                // write files
+                writeLogLine("Saving to file and unpacking...");
                 Application.DoEvents();
-                client.DownloadFile("http://gta.vdgtech.eu/install_release_current.7z", tmparchfile);
-
-                writeLogLine("Unpacking release");
-                Application.DoEvents();
-                Process unpacker = new Process();
-                unpacker.StartInfo = new ProcessStartInfo(tmp7zfile, "x -y -o\"" + path + "\" \"" + tmparchfile + "\"");
+                //start unpacking
+                string zipPath = @tmpFiles;
+                string extractPath = @path+"\\temp_miv\\";// this will extract to the temp_miv folder in the path that the user chose
+                ZipFile.ExtractToDirectory(zipPath, extractPath);
+                /*Process unpacker = new Process();
+                unpacker.StartInfo = new ProcessStartInfo(tmpUnpacker, "x -y -o\"" + path + "\" \"" + tmpFiles + "\"");
                 unpacker.StartInfo.UseShellExecute = false;
                 unpacker.StartInfo.CreateNoWindow = true;
                 unpacker.StartInfo.RedirectStandardOutput = true;
@@ -79,9 +83,25 @@ namespace Setup
                     string line = String.Join<char>("", block);
                     writeLog(line);
                     Application.DoEvents();
+                }*/
+                string fileListPathServer = extractPath+"\\server\\";
+                string fileListPathClient = extractPath+"\\client\\";
+                string[] fileList = System.IO.Directory.GetFiles(fileListPathServer); //move server files first
+                foreach (string file in fileList) {
+                    string fileToMove = fileListPathServer+file;
+                    string moveTo = path+file;
+                    //moving file
+                    File.Move(fileToMove, moveTo);
+                }
+                string[] fileListC = System.IO.Directory.GetFiles(fileListPathServer); //move server files first
+                foreach (string file in fileListC) {
+                    string fileToMove = fileListPathClient+file;
+                    string moveTo = path+file;
+                    //moving file
+                    File.Move(fileToMove, moveTo);
                 }
                 writeLogLine("Finished!");
-                var result = MessageBox.Show("Installation has finished. Would you like to run MIV client now?", "Success and triumph!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var result = MessageBox.Show("MIV has been installed. Would you like to play now?", "Hooray!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == System.Windows.Forms.DialogResult.Yes)
                 {
                     Process.Start(new ProcessStartInfo(path + "\\MIVClientGUI.exe")
@@ -93,8 +113,8 @@ namespace Setup
             }
             catch (Exception e)
             {
-                writeLogLine("FATAL ERROR: " + e.GetType().ToString() + ": " + e.Message);
-                writeLogLine("Installation stopped due to fatal error.");
+                writeLogLine("Oh no! Error: " + e.GetType().ToString() + ": " + e.Message);
+                writeLogLine("Installation failed, something went wrong. (Submit an issue on the GitHub page with the above error message if you don't know what happened.)");
             }
             finally
             {
